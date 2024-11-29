@@ -1,0 +1,32 @@
+{"properties": [
+  {
+    "name": "springdoc.swagger-ui.path",
+    "type": "java.lang.String",
+    "description": "A description for 'springdoc.swagger-ui.path'"
+  },
+  {
+    "name": "springdoc.swagger-ui.path",
+    "type": "java.lang.String",
+    "description": "A description for 'springdoc.swagger-ui.path'"
+  },
+  {
+    "name": "springdoc.packages-to-scan",
+    "type": "java.lang.String",
+    "description": "A description for 'springdoc.packages-to-scan'"
+  },
+  {
+    "name": "rabbitmq.exchange.name",
+    "type": "java.lang.String",
+    "description": "A description for 'rabbitmq.exchange.name'"
+  },
+  {
+    "name": "springdoc.api-docs.path",
+    "type": "java.lang.String",
+    "description": "A description for 'springdoc.api-docs.path'"
+  },
+  {
+    "name": "rabbitmq.queue.name",
+    "type": "java.lang.String",
+    "description": "A description for 'rabbitmq.queue.name'"
+  }
+]}
