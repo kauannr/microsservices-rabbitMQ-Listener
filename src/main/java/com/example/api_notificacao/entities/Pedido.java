@@ -5,11 +5,8 @@
     import java.util.List;
     import java.util.UUID;
 
-    import com.example.api_notificacao.enums.StatusPedido;
-    import com.fasterxml.jackson.annotation.JsonFormat;
-    import com.fasterxml.jackson.annotation.JsonProperty;
-    import com.fasterxml.jackson.annotation.JsonProperty.Access;
-
+import com.example.api_notificacao.entities.enums.StatusPedido;
+import com.fasterxml.jackson.annotation.JsonFormat;
     import lombok.Data;
     import lombok.NoArgsConstructor;
 
