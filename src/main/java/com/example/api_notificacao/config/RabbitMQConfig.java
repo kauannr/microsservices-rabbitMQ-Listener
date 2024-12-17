@@ -1,5 +1,8 @@
 package com.example.api_notificacao.config;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.FanoutExchange;
@@ -24,14 +27,34 @@ public class RabbitMQConfig {
     @Value("${rabbitmq.queue.name}")
     private String queueName;
 
+    @Value("${rabbitmq.exchange.dlx.name}")
+    private String exchangeDlxName;
+
+    @Value("${rabbitmq.queue.dlq.name}")
+    private String queueDlqName;
+
     @Bean
     public FanoutExchange pedidosExchange() {
         return new FanoutExchange(exchangeName);
     }
 
     @Bean
+    public FanoutExchange pedidosDlxExchange() {
+        return new FanoutExchange(exchangeDlxName);
+    }
+
+    @Bean
     public Queue queueDeNotificacao() {
-        return new Queue(queueName);
+
+        Map<String, Object> argumentos = new HashMap<>();
+        argumentos.put("x-dead-letter-exchange", exchangeDlxName);
+
+        return new Queue(queueName, true, false, false, argumentos);
+    }
+
+    @Bean
+    public Queue queueDlqDeNotificacao() {
+        return new Queue(queueDlqName);
     }
 
     @Bean
@@ -40,25 +63,30 @@ public class RabbitMQConfig {
     }
 
     @Bean
+    public Binding bindingDlq() {
+        return BindingBuilder.bind(queueDlqDeNotificacao()).to(pedidosDlxExchange());
+    }
+
+    @Bean
     public RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory) {
         return new RabbitAdmin(connectionFactory);
     }
 
     @Bean
-    public MessageConverter messageConverter(){
+    public MessageConverter messageConverter() {
         return new Jackson2JsonMessageConverter();
     }
 
     @Bean
-    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory, MessageConverter messageConverter){
+    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory, MessageConverter messageConverter) {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setMessageConverter(messageConverter);
 
         return rabbitTemplate;
     }
 
-    @Bean 
-    public ApplicationListener<ApplicationReadyEvent> applicationListener(RabbitAdmin rabbitAdmin){
+    @Bean
+    public ApplicationListener<ApplicationReadyEvent> applicationListener(RabbitAdmin rabbitAdmin) {
         return event -> rabbitAdmin.initialize();
     }
 
